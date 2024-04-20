@@ -1,0 +1,49 @@
+Emoticons have long been part of text messaging (and before that e-mail), ranging from simple smileys such as : ) and : – ) to flowers @>–>—.  Traditionally, emoticons have been pictorial representation of a feeling or expression, with that picture being constructed by combining punctuation characters and other standard text characters.  Some messaging clients automatically replace common emoticons such as smileys with a graphic image, such as :).
+
+In Japan, emoji characters were added to mobile phones to provide users with access to graphic pictograms that were richer in presentation than this character based representation.
+
+Due to interoperability considerations, emoji characters were incorporated into the Unicode 6.0 standard in 2010.
+
+While Apple had supported emoji characters in prior versions of iOS, Apple began supporting these characters using Unicode encoding in iOS5.  Emoji characters are also widely supported with Unicode encoding in Windows Phone.  A smaller number of emoji characters are supported by current Android releases (as of version 4.3).
+
+To include these emoticon/emoji characters in a text message, the text message must be sent over the air using Unicode format, more specifically UTF-16.
+
+For this reason, it is appropriate to recall the message formats and size limitations for SMS.<|endoftext|>
+
+GSM text messages are limited in size to 140 8-bit bytes of message data per message.  To facilitate longer messages, headers can be included in the SMS message data to tell the receiving client to combine multiple segmented messages and display them as a single long message.  This segmentation header (included in the user data header of the message data) requires 6 bytes, meaning that each segment of a long message can include no more than 134 bytes of message data (134 + 6 = 140).
+
+In practice, there are three types of encoding that can be used for a text message.
+
+Binary – Used for system messages, such as voice mail notification, WAP Push, MMS Notification, SIM update, etc.
+
+Text – Message can only contain characters included in the GSM 7-bit character set (see tables and info in Long SMS Text Messages and the 160 Character Limit). This restricted character set which contains English characters, plus a few symbols, and some international characters for Western Europe and Greece (Greek capital letters are included). 160 7-bit characters are compressed into 140 8-bit bytes to produce the 160 character limit that we are so familiar with. (Note: 160 * 7 = 140 * 8 ) For long messages, up to 153 7-bit characters can be present in each message segment.
+
+Unicode – For text messages that include any characters outside of the GSM 7-bit character set, UTF-16 Unicode encoding must be used for the entire message.  This encoding uses 16 bits (2 bytes) for each character (with some characters, such as many emoticons requiring 32 bits, or 4 bytes, per character).  Each and every character in a Unicode format message must be encoded using at least 16 bits, even if the character is part of the GSM 7-bit character set.  This results in a limit of 70 16-bit characters in a single Unicode format message, or up to 67 characters per segment in a long message.
+
+(Side note:  For some languages, especially Turkish, shift tables can be used as an alternative to Unicode format.  For more detail, see Shift Tables – National Language SMS in 160 characters without Unicode.)
+
+For more review of these issues, please see Long SMS Text Messages and the 160 Character Limit.<|endoftext|>
+
+NowSMS automatically decides whether to use Unicode format depending on whether or not characters present in the message are all part of the GSM character set.
+
+Emoticon and emoji symbols are outside of the GSM character set, requiring that any SMS text messages using these characters be encoded in Unicode format.
+
+As an example, the smiley emoticon 🙂 is Unicode character 0x16F03.
+
+One thing that you will immediately notice by its character code is that this character code is larger than can be represented in 16 bits.
+
+As the Unicode standard has grown, it has been determined that not all universal characters can be accommodated within the 65,536 possible codes available in a 16-bit alphabet.
+
+Characters that can be encoded in 16 bits are known as the UCS-2 alphabet.  The full Unicode character set, which includes characters 0x10000 and above is known as the UCS-4 alphabet.
+
+Unicode SMS format was originally defined as using UCS-2 encoding, but standards updates have changed this to use UTF-16 encoding instead.  Characters below 0x10000, which are part of the UCS-2 range, are encoded in UTF-16 as their standard 16-bit character value.  Characters 0x10000 and above (UCS-4) are encoded in UTF-16 with two 16-bit characters.  (Portions of the UCS-2 character space were reserved to prevent conflicts.)
+
+Our friend the smiley emoticon 🙂 is 0x00016F03 in UCS-4 (or UTF-32) encoding.  In UTF-16 encoding, it is encoded as two 16-bit characters, 0xD83D followed by 0xDE0x.
+
+But wait … it gets a little more complicated.
+
+When working with the HTTP protocol, Unicode characters are more typically encoded using UTF-8 encoding.  This is the default character set used by NowSMS HTTP interfaces.
+
+In UTF-8 encoding, 🙂 (0x16F03) is encoded as four 8-bit characters 0xF0 0x9F 0x98 0x83.
+
+NowSMS version 2013.08.30 or higher is required to support emoticon characters outside of the 16-bit UCS2 range. 
